@@ -11,7 +11,7 @@ int networkAlertStub(float celcius) {
     return 500;
 }
 
-void alertInCelcius(float farenheit,int(*networkAlerter)(float)) {
+void alertInCelcius(float farenheit) {
     float celcius = (farenheit - 32) * 5 / 9;
     int returnCode = networkAlertStub(celcius);
     if (returnCode != 200) {
@@ -33,11 +33,11 @@ int networkAlertMock(float celcius) {
 }
 void stateBasedtest()
 {
-    alertInCelcius(400.5,&networkAlerterStub);
+    alertInCelcius(400.5,&networkAlertStub);
     assert(alertFailureCount ==1);
 }
 void behaviorTest(){
-    alertInCelcius(303.6,&networkAlerterMock);
+    alertInCelcius(303.6,&networkAlertMock);
     assert(alertFailureCount ==1);
     float expectedCelToBeReceivdByDepedency = 204.72222;
     assert(actualCelicusReceived ==expectedCelToBeReceivdByDepedency); 
