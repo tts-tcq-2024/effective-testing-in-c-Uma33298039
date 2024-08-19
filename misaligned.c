@@ -14,16 +14,30 @@ int printColorMap() {
     return i * j;
 }
 
-char capturedOutput[1024];
-char* captureOutput() {
-    capturedOutput[0] = '\0';
-    setvbuf(stdout, capturedOutput, _IOFBF, sizeof(capturedOutput));
-    return capturedOutput;
+void captureOutputToFile(const char* fileName) {
+    freopen(fileName, "w", stdout);
+}
+
+char* readCapturedOutput(const char* fileName) {
+    static char buffer[1024];
+    FILE* fp = fopen(fileName, "r");
+    if (fp) {
+        size_t len = fread(buffer, 1, sizeof(buffer) - 1, fp);
+        buffer[len] = '\0';
+        fclose(fp);
+    }
+    return buffer;
 }
 
 int main() {
-    captureOutput();
-    int result = printColorMap(); 
+    const char* outputFileName = "output.txt";
+    captureOutputToFile(outputFileName);
+    
+    int result = printColorMap();
+    
+    // Restore stdout to its original state
+    freopen("/dev/tty", "w", stdout);
+    
     // Test case to check if the correct color mapping is printed
     const char* expectedOutput =
         "0 | White | Blue\n"
@@ -50,9 +64,12 @@ int main() {
         "21 | Violet | Orange\n"
         "22 | Violet | Green\n"
         "23 | Violet | Brown\n"
-        "24 | Violet | Slate\n"; 
+        "24 | Violet | Slate\n";
+    
+    char* capturedOutput = readCapturedOutput(outputFileName);
     assert(result == 25);
     assert(strcmp(capturedOutput, expectedOutput) == 0);
+    
     printf("All is well (maybe!)\n");
     return 0;
 }
