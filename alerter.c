@@ -33,11 +33,11 @@ int networkAlertMock(float celcius) {
 }
 void stateBasedtest()
 {
-    alertInCelcius(400.5,&networkAlertStub);
+    alertInCelcius(400.5,&networkAlerterStub);
     assert(alertFailureCount ==1);
 }
 void behaviorTest(){
-    alertInCelcius(303.6,&networkAlertMock);
+    alertInCelcius(303.6,&networkAlerterMock);
     assert(alertFailureCount ==1);
     float expectedCelToBeReceivdByDepedency = 204.72222;
     assert(actualCelicusReceived ==expectedCelToBeReceivdByDepedency); 
