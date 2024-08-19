@@ -23,11 +23,29 @@ void alertInCelcius(float farenheit) {
     }
 }
 
+float actualCelicusReceived;
+int networkAlertCallCount = 0;
+
+int networkAlertMock(float celcius) {
+    actualCelicusReceived =celcius;
+    ++networkAlertCallCount;
+    return 500;
+}
+void stateBasedtest()
+{
+    alertInCelcius(400.5,&networkAlertStub);
+    assert(alertFailureCount ==1);
+}
+void behaviorTest(){
+    alertInCelcius(303.6,&networkAlertMock);
+    assert(alertFailureCount ==1);
+    float expectedCelToBeReceivdByDepedency = 204.72222;
+    assert(actualCelicusReceived ==expectedCelToBeReceivdByDepedency); 
+    assert(networkAlertCallCount ==1); 
+}
+
 
 int main() {
-    alertInCelcius(400.5);
-    alertInCelcius(303.6);
-    assert(alertFailureCount == 2); 
     printf("%d alerts failed.\n", alertFailureCount);
     printf("All is well (maybe!)\n");
     return 0;
