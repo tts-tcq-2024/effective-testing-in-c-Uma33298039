@@ -6,12 +6,12 @@
 
 int alertFailureCount = 0;
 
-int realTimenetworkAleter(float celcius)
-{
-    return 0;
-}
+//int realTimenetworkAleter(float celcius)
+//{
+//    return 0;
+//}
 
-void alertInCelcius(float farenheit, int(*networkAlerter)(float) {
+void alertInCelcius(float farenheit, int(*networkAlerter)(float)) {
     float celcius = (farenheit - 32) * 5 / 9;
     int returnCode = networkAlerter(celcius);
     if (returnCode != 200) {
@@ -38,7 +38,7 @@ int networkAlertMock(float celcius) {
 }
 void stateBasedtest()
 {
-    alertInCelcius(400.5,&networkAlertstub);
+    alertInCelcius(400.5,&networkAlertStub);
     assert(alertFailureCount ==1);
 }
 void behaviorTest(){
